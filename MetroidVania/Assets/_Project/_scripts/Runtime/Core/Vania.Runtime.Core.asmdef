@@ -1,7 +1,9 @@
 {
-    "name": "Vania.Runtime",
-    "rootNamespace": "Vania.Runtime",
-    "references": [],
+    "name": "Vania.Runtime.Core",
+    "rootNamespace": "Vania.Runtime.Core",
+    "references": [
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [
         "Android",
         "Editor",

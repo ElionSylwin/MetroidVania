@@ -3,7 +3,8 @@
     "rootNamespace": "Vania.Runtime.Player",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:a1802b9bb982a094fad079cf2d94e818"
+        "GUID:a1802b9bb982a094fad079cf2d94e818",
+        "GUID:7db186820a4524247ac29b0b8442dd88"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

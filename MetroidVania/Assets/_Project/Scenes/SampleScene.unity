@@ -541,7 +541,6 @@ GameObject:
   m_Component:
   - component: {fileID: 702175055}
   - component: {fileID: 702175056}
-  - component: {fileID: 702175058}
   - component: {fileID: 702175054}
   - component: {fileID: 702175053}
   - component: {fileID: 702175057}
@@ -629,6 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149cfba92eecf2b41b9e442f3fdc8043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rb: {fileID: 702175054}
   _Interact: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   canInteract: 0
 --- !u!114 &702175057
@@ -661,23 +661,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &702175058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702175052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016e1891968b31c4abe94083ea317d8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundDist: 0
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  movementSpeed: 2
 --- !u!136 &702175059
 CapsuleCollider:
   m_ObjectHideFlags: 0
