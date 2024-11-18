@@ -3,27 +3,32 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Vania.Runtime.Interfaces;
 using Vania.Runtime.Core;
+using System.Collections.Generic;
 
 namespace Vania.Runtime.Player
 {
     public class PlayerController : BaseStateMachine
     {
-        [SerializeField] private PlayerState _currentState;
+        [SerializeField] private BaseState _currentState;
 
-        //States
-        private PlayerState movementState;
-        
-        [SerializeField] private Rigidbody _rb;
-        
+        #region States
+        public BaseState movementState;
+        public BaseState jumpState;
+        #endregion
 
+        [Header("Configs")]
+        [SerializeField] private PlayerMovementConfig _movementConfig;
+        [SerializeField] private PlayerJumpConfig _jumpConfig;
+
+        [Header("Data")]
+        [SerializeField] private PlayerControls _controls;
+        [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private Transform _transform;
 
         [SerializeField] private InputActionReference _Interact;
 
         [SerializeField] private bool canInteract = false;
         [SerializeField] private IInteractable interactableInstance;
-
-        [SerializeField] private PlayerControls _controls;
-        private Vector2 _movement;
 
         private void Awake()
         {
@@ -32,7 +37,8 @@ namespace Vania.Runtime.Player
 
         private void Start()
         {
-            movementState = new PlayerMovementState(this,_rb,transform);
+            movementState = new PlayerMovementState(_movementConfig,this,_controls,_rigidbody,_transform);
+            jumpState = new PlayerJumpState(_jumpConfig, this, _controls, _rigidbody, _transform);
 
             SwitchState(movementState);
         }
@@ -40,9 +46,6 @@ namespace Vania.Runtime.Player
         private void OnEnable()
         {
             _controls.Player.Enable();
-
-            _controls.Player.Move.performed += OnMove;
-            _controls.Player.Move.canceled += OnMove;
 
             _Interact.action.performed += TryToInteract;
             _Interact.action.Enable();
@@ -52,9 +55,6 @@ namespace Vania.Runtime.Player
         {
             _Interact.action.performed -= TryToInteract;
             _Interact.action.Disable();
-
-            _controls.Player.Move.performed -= OnMove;
-            _controls.Player.Move.canceled -= OnMove;
         }
 
         private void TryToInteract(InputAction.CallbackContext context)
@@ -95,17 +95,12 @@ namespace Vania.Runtime.Player
             _currentState.FixedUpdateState();
         }
 
-        public void SwitchState(PlayerState newState)
+        public void SwitchState(BaseState newState)
         {
             _currentState?.ExitState();
             _currentState = newState;
-            _currentState.EnterState(this);
+            _currentState.EnterState();
         }
 
-        private void OnMove(InputAction.CallbackContext context)
-        {
-            _movement = context.ReadValue<Vector2>();
-            _currentState.OnMoveInput(_movement);
-        }
     }
 }
