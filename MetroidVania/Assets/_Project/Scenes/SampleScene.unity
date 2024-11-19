@@ -800,6 +800,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2272357293517799038, guid: f855fc607b0f5ab4fb1c7da7dc9c40f8, type: 3}
+      propertyPath: _dashConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 5cb60a45fc13f344bb87734dc353161e, type: 2}
     - target: {fileID: 4863347068155570275, guid: f855fc607b0f5ab4fb1c7da7dc9c40f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

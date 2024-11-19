@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Vania.Runtime.Core;
 
@@ -6,11 +8,14 @@ namespace Vania.Runtime.Player
 {
     public class PlayerJumpState : BaseState
     {
+        private MonoBehaviour _mono;
         private PlayerJumpConfig config;
         private bool isGrounded;
+        private bool canDoubleJump = false;
 
-        public PlayerJumpState(PlayerJumpConfig config, PlayerController controller, PlayerControls controls, Rigidbody rigidbody, Transform transform)
+        public PlayerJumpState(MonoBehaviour mono,PlayerJumpConfig config, PlayerController controller, PlayerControls controls, Rigidbody rigidbody, Transform transform)
         {
+            _mono = mono;
             this.config = config;
             config.SetController(controller);
             config.SetControls(controls);
@@ -20,12 +25,12 @@ namespace Vania.Runtime.Player
 
         public override void EnterState()
         {
-            config.GetRigidbody.linearVelocity = new Vector3(config.GetRigidbody.linearVelocity.x, config.JumpStrength);
+            Jump();
+            _mono.StartCoroutine(DoubleJumpWindow());
         }
 
         public override void FixedUpdateState()
         {
-            Debug.Log("Jump state");
         }
 
         public override void UpdateState()
@@ -45,6 +50,7 @@ namespace Vania.Runtime.Player
                 if (hit.collider != null)
                 {
                     isGrounded = true;
+                    canDoubleJump = false;
                 }
                 else
                 {
@@ -55,7 +61,32 @@ namespace Vania.Runtime.Player
 
         public override void ExitState()
         {
-            
+            _mono.StopAllCoroutines();
+            config.GetControls.Player.Jump.performed -= DoubleJump;
+        }
+
+        private IEnumerator DoubleJumpWindow()
+        {
+            canDoubleJump = true;
+
+            config.GetControls.Player.Jump.performed += DoubleJump;
+            yield return new WaitForSeconds(config.DoubleJumpWindow);
+            canDoubleJump = false;
+            config.GetControls.Player.Jump.performed -= DoubleJump;
+        }
+
+        private void DoubleJump(InputAction.CallbackContext context)
+        {
+            if(canDoubleJump)
+            {
+                Jump();
+                canDoubleJump = false;
+            }    
+        }
+
+        private void Jump()
+        {
+            config.GetRigidbody.linearVelocity = new Vector2(config.GetRigidbody.linearVelocity.x, config.JumpStrength);
         }
     }
 }

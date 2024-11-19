@@ -27,14 +27,16 @@ namespace Vania.Runtime.Player
             config.GetControls.Player.Move.canceled += OnMove;
 
             config.GetControls.Player.Jump.performed += Jump;
+
+            config.GetControls.Player.Dash.performed += Dash;
+
+
             if (!config.GetControls.Player.Move.inProgress) { _movement = new Vector2(0, 0); }
         }
 
         public override void UpdateState()
         {
             //SnapToGround();
-            Debug.LogWarning(isGrounded);
-            Debug.Log("Movement State");
             DoChecks();
         }
 
@@ -66,6 +68,8 @@ namespace Vania.Runtime.Player
             config.GetControls.Player.Move.canceled -= OnMove;
 
             config.GetControls.Player.Jump.performed -= Jump;
+
+            config.GetControls.Player.Dash.performed -= Dash;
         }
 
         private void OnMove(InputAction.CallbackContext context)
@@ -92,6 +96,11 @@ namespace Vania.Runtime.Player
         private void Jump(InputAction.CallbackContext context)
         {
             if (isGrounded) {config.GetController.SwitchState(config.GetController.jumpState); }
+        }
+
+        private void Dash(InputAction.CallbackContext context)
+        {
+            if (isGrounded) { config.GetController.SwitchState(config.GetController.dashState); }
         }
     }
 }

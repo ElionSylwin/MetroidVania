@@ -14,11 +14,13 @@ namespace Vania.Runtime.Player
         #region States
         public BaseState movementState;
         public BaseState jumpState;
+        public BaseState dashState;
         #endregion
 
         [Header("Configs")]
         [SerializeField] private PlayerMovementConfig _movementConfig;
         [SerializeField] private PlayerJumpConfig _jumpConfig;
+        [SerializeField] private PlayerDashConfig _dashConfig;
 
         [Header("Data")]
         [SerializeField] private PlayerControls _controls;
@@ -37,8 +39,9 @@ namespace Vania.Runtime.Player
 
         private void Start()
         {
-            movementState = new PlayerMovementState(_movementConfig,this,_controls,_rigidbody,_transform);
-            jumpState = new PlayerJumpState(_jumpConfig, this, _controls, _rigidbody, _transform);
+            movementState = new PlayerMovementState(_movementConfig, this, _controls, _rigidbody, _transform);
+            jumpState = new PlayerJumpState(this, _jumpConfig, this, _controls, _rigidbody, _transform);
+            dashState = new PlayerDashState(this, _dashConfig, this, _controls, _rigidbody,_transform);
 
             SwitchState(movementState);
         }
@@ -69,7 +72,6 @@ namespace Vania.Runtime.Player
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.LogWarning(other.gameObject.name);
             if(other.CompareTag("Interactable"))
             {
                 Debug.Log("Got tag");
